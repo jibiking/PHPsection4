@@ -17,7 +17,7 @@
 
 <main>
 <h2>Practice</h2>
-<pre>
+
 <!-- ここにプログラムを記述します -->
 <?php
 try{
@@ -26,13 +26,17 @@ try{
   echo 'DB接続エラー: '. $e->getMessage();
 }
 
-$records = $db->query('SELECT * FROM my_items');
-while($record = $records->fetch()){
-  print($record['item_name'] . "\n");
-}
-
+$memos = $db->query('SELECT * FROM memos ORDER BY id DESC');
 ?>
-</pre>
+
+<article>
+<?php while($memo = $memos->fetch()): ?>
+<p><a href="memo.php?id=<?php print($memo['id']); ?>"><?php print（(mb_substr($memo['memo'], 0, 50)); ?></a></p>
+<time><?php print($memo['created_at']); ?></time>
+<hr>
+<?php endwhile; ?>
+</article>
+
 </main>
-</body>    
+</body>
 </html>

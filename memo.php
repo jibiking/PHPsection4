@@ -17,24 +17,30 @@
 
 <main>
 <h2>Practice</h2>
-<pre>
+
 <!-- ここにプログラムを記述します -->
 <?php
-try {
+try{
   $db = new PDO('mysql:dbname=mydb;host=localhost;port=8889;charset=utf8', 'root', 'root');
-
-  $statement = $db->prepare('INSERT INTO memos SET memo=?, created_at=NOW()');
-  $statement->bindParam(1, $_POST['memo']);
-  $statement->execute();
-  echo 'メッセージが登録されました';
-} catch(PDOException $e){
-  echo 'DB接続エラー: ' . $e->getMessage();
+} catch(PDOException $e) {
+  echo 'DB接続エラー: '. $e->getMessage();
 }
 
+$id = $_REQUEST['id'];
+if(!is_numeric($id) || $id <= 0){
+  print('１以上の数字で指定してください');
+  exit();
+}
 
-
+$memos = $db->prepare('SELECT * FROM memos WHERE id=?');
+$memos->execute(array($id));
+$memo = $memos->fetch();
 ?>
-</pre>
+<article>
+<pre><?php print($memo['memo']);?></pre>
+<a href="index.php">戻る</a>
+</article>
+
 </main>
 </body>    
 </html>
